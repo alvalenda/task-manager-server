@@ -31,12 +31,22 @@ export class TasksService {
     return task;
   }
 
-  updateTask(id: string, taskStatus: TaskStatus): Task {
+  updateTaskStatus(id: string, taskStatus: TaskStatus): Task {
+    let updatedTask: Task = this.getTaskById(id);
+
+    updatedTask.status = taskStatus;
+
+    return updatedTask;
+  }
+
+  updateTask(id: string, dto: UpdateTaskDto): Task {
     let updatedTask: Task = this.getTaskById(id);
 
     updatedTask = {
-      ...updatedTask,
-      status: taskStatus,
+      id: updatedTask.id,
+      title: dto.title || updatedTask.title,
+      description: dto.description || updatedTask.description,
+      status: dto.status || updatedTask.status,
     };
 
     this.tasks = this.tasks.map((task) =>
