@@ -1,5 +1,4 @@
-import { IsIn, IsOptional } from 'class-validator';
-import { IsNotEmpty } from 'class-validator/types/decorator/decorators';
+import { IsIn, IsOptional, IsNotEmpty } from 'class-validator';
 import { TaskStatus } from '../entities/tasks.entity';
 
 export class GetTasksFilterDto {
