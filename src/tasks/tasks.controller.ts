@@ -1,5 +1,13 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
-import { Delete, Patch, Query } from '@nestjs/common/decorators';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  ValidationPipe,
+} from '@nestjs/common';
+import { Delete, Patch, Query, UsePipes } from '@nestjs/common/decorators';
+import { handleError } from 'src/common/helpers/http-exception.filter';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { GetTasksFilterDto } from './dto/get-tasks-filter.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
@@ -25,8 +33,13 @@ export class TasksController {
   }
 
   @Post()
+  @UsePipes(ValidationPipe)
   createTask(@Body() dto: CreateTaskDto): Task {
-    return this.tasksService.createTask(dto);
+    try {
+      return this.tasksService.createTask(dto);
+    } catch (err) {
+      handleError(err);
+    }
   }
 
   @Patch('/:id/status')

@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { GetTasksFilterDto } from './dto/get-tasks-filter.dto';
+import { handleError } from 'src/common/helpers/http-exception.filter';
 
 @Injectable()
 export class TasksService {
@@ -33,7 +34,15 @@ export class TasksService {
   }
 
   getTaskById(id: string): Task {
-    return this.tasks.find((task) => task.id === id);
+    const found = this.tasks.find((task) => task.id === id);
+
+    if (!found)
+      throw {
+        name: 'NotFoundError',
+        message: `Task with id ${id} not found`,
+      };
+
+    return found;
   }
 
   createTask(dto: CreateTaskDto): Task {
@@ -77,6 +86,7 @@ export class TasksService {
   }
 
   deleteTask(id: string): void {
-    this.tasks = this.tasks.filter((task) => task.id !== id);
+    const foundTask = this.getTaskById(id);
+    this.tasks = this.tasks.filter((task) => task.id !== foundTask.id);
   }
 }
