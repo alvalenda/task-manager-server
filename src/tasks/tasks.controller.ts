@@ -13,7 +13,7 @@ import { handleError } from 'src/common/helpers/http-exception.filter';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { GetTasksFilterDto } from './dto/get-tasks-filter.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
-import { Task, TaskStatus } from './entities/tasks.entity';
+import { Task, TaskStatus } from './model/tasks.model';
 import { TasksService } from './tasks.service';
 
 @ApiTags('tasks')
