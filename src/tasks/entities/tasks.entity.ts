@@ -10,7 +10,7 @@ import { TaskStatus } from '../model/tasks.model';
 @Entity()
 export class Task extends BaseEntity {
   @PrimaryGeneratedColumn()
-  id: number;
+  id: string;
 
   @Column()
   title: string;
