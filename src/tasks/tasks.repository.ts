@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common/decorators/core/injectable.decorator';
 import { DataSource, Repository } from 'typeorm';
 import { Task } from './entities/tasks.entity';
-import { TaskStatus } from './model/tasks.model';
+import { TaskStatus } from './model/tasks-status.model';
 
 @Injectable()
 export class TaskRepository extends Repository<Task> {

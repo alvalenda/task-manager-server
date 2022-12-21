@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsIn, IsOptional, IsNotEmpty } from 'class-validator';
-import { TaskStatus } from '../model/tasks.model';
+import { TaskStatus } from '../model/tasks-status.model';
 
 export class GetTasksFilterDto {
   @IsOptional()
