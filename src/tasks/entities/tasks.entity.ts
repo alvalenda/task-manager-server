@@ -1,16 +1,10 @@
-import {
-  BaseEntity,
-  Column,
-  Entity,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { TaskStatus } from '../model/tasks-status.model';
 
 @Entity()
 export class Task extends BaseEntity {
   @PrimaryGeneratedColumn()
-  id: number;
+  id?: string;
 
   @Column()
   title: string;

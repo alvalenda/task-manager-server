@@ -3,7 +3,6 @@ import {
   Controller,
   Get,
   Param,
-  ParseIntPipe,
   Post,
   ValidationPipe,
 } from '@nestjs/common';
@@ -14,8 +13,8 @@ import { handleError } from 'src/common/helpers/http-exception.filter';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { GetTasksFilterDto } from './dto/get-tasks-filter.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
-import { TaskStatus } from './model/tasks-status.model';
 import { Task } from './entities/tasks.entity';
+import { TaskStatus } from './model/tasks-status.model';
 import { TasksService } from './tasks.service';
 
 @ApiTags('tasks')
@@ -39,14 +38,14 @@ export class TasksController {
   //   return this.tasksService.getAllTasks();
   // }
 
-  @Get('/:id')
-  @ApiOperation({
-    summary: 'Get task by ID',
-    description: 'Get task by ID',
-  })
-  async getTaskById(@Param('id', ParseIntPipe) id: number): Promise<Task> {
-    return this.tasksService.getTaskById(id);
-  }
+  // @Get('/:id')
+  // @ApiOperation({
+  //   summary: 'Get task by ID',
+  //   description: 'Get task by ID',
+  // })
+  // getTaskById(@Param('id') id: string): Task {
+  //   return this.tasksService.getTaskById(id);
+  // }
 
   // @Post()
   // @ApiOperation({
