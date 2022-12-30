@@ -16,7 +16,7 @@ import { GetTasksFilterDto } from './dto/get-tasks-filter.dto';
 import { UpdateTaskStatusDto } from './dto/update-task-status.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { Task } from './entities/tasks.entity';
-import { TaskStatus } from './model/tasks-status.model';
+import { TaskStatus } from './model/tasks-status.enum';
 import { TasksService } from './tasks.service';
 
 @ApiTags('tasks')
@@ -24,21 +24,17 @@ import { TasksService } from './tasks.service';
 export class TasksController {
   constructor(private readonly tasksService: TasksService) {}
 
-  // @Get()
-  // @ApiOperation({
-  //   summary: 'Get all tasks',
-  //   description:
-  //     'Get all tasks. The seach can be filtered via query arguments "search" and "status". It is optional to provide both arguments.',
-  // })
-  // @ApiQuery({ name: 'status', required: false })
-  // @ApiQuery({ name: 'search', required: false })
-  // getTasks(@Query(ValidationPipe) filterDto: GetTasksFilterDto): Task[] {
-  //   if (Object.keys(filterDto).length) {
-  //     return this.tasksService.getTasksWithFilters(filterDto);
-  //   }
-
-  //   return this.tasksService.getAllTasks();
-  // }
+  @Get()
+  @ApiOperation({
+    summary: 'Get all tasks',
+    description:
+      'Get all tasks. The seach can be filtered via query arguments "search" and "status". It is optional to provide both arguments.',
+  })
+  @ApiQuery({ name: 'status', required: false })
+  @ApiQuery({ name: 'search', required: false })
+  async getTasks(@Query(ValidationPipe) filterDto: GetTasksFilterDto) {
+    return await this.tasksService.getTasks(filterDto);
+  }
 
   @Get('/:id')
   @ApiOperation({
