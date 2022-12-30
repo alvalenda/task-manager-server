@@ -52,20 +52,20 @@ export class TasksController {
     }
   }
 
-  // @Post()
-  // @ApiOperation({
-  //   summary: 'Create a new task',
-  //   description:
-  //     'Create a new task with a title and a description. The status is set to "OPEN" by default.',
-  // })
-  // @UsePipes(ValidationPipe)
-  // createTask(@Body() dto: CreateTaskDto): Task {
-  //   try {
-  //     return this.tasksService.createTask(dto);
-  //   } catch (err) {
-  //     handleError(err);
-  //   }
-  // }
+  @Post()
+  @ApiOperation({
+    summary: 'Create a new task',
+    description:
+      'Create a new task with a title and a description. The status is set to "OPEN" by default.',
+  })
+  @UsePipes(ValidationPipe)
+  async createTask(@Body() dto: CreateTaskDto): Promise<Task> {
+    try {
+      return await this.tasksService.createTask(dto);
+    } catch (err) {
+      handleError(err);
+    }
+  }
 
   // @Patch('/:id/status')
   // @ApiOperation({
@@ -91,12 +91,16 @@ export class TasksController {
   //   return this.tasksService.updateTask(id, dto);
   // }
 
-  // @Delete('/:id')
-  // @ApiOperation({
-  //   summary: 'Delete one task by ID',
-  //   description: 'Delete one task by ID. The task will be deleted permanently.',
-  // })
-  // deleteTask(@Param('id') id: string): void {
-  //   this.tasksService.deleteTask(id);
-  // }
+  @Delete('/:id')
+  @ApiOperation({
+    summary: 'Delete one task by ID',
+    description: 'Delete one task by ID. The task will be deleted permanently.',
+  })
+  async deleteTask(@Param('id', ParseIntPipe) id: number): Promise<void> {
+    try {
+      await this.tasksService.deleteTask(id);
+    } catch (err) {
+      handleError(err);
+    }
+  }
 }
