@@ -17,15 +17,15 @@ export class TaskRepository extends Repository<Task> {
     return await this.find();
   }
 
-  async getTaskById(id: string): Promise<Task> {
+  async getTaskById(id: number): Promise<Task> {
     return await this.findOne({ where: { id } });
   }
 
-  async deleteTask(id: string): Promise<void> {
+  async deleteTask(id: number): Promise<void> {
     await this.delete(id);
   }
 
-  async updateTaskStatus(id: string, status: TaskStatus): Promise<Task> {
+  async updateTaskStatus(id: number, status: TaskStatus): Promise<Task> {
     const task = await this.getTaskById(id);
     task.status = status;
     await this.save(task);
