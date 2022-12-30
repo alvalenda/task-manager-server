@@ -1,34 +1,25 @@
 import { Injectable } from '@nestjs/common/decorators/core/injectable.decorator';
 import { DataSource, Repository } from 'typeorm';
+import { CreateTaskDto } from './dto/create-task.dto';
 import { Task } from './entities/tasks.entity';
 import { TaskStatus } from './model/tasks-status.model';
 
+// Não implementado
 @Injectable()
 export class TaskRepository extends Repository<Task> {
   constructor(private dataSource: DataSource) {
     super(Task, dataSource.createEntityManager());
   }
 
-  async createTask(task: Task): Promise<Task> {
-    return await this.save(task);
-  }
+  async createTask(dto: CreateTaskDto): Promise<Task> {
+    const { title, description } = dto;
 
-  async getTasks(): Promise<Task[]> {
-    return await this.find();
-  }
+    const task = new Task();
+    task.title = title;
+    task.description = description;
+    task.status = TaskStatus.OPEN;
 
-  async getTaskById(id: number): Promise<Task> {
-    return await this.findOne({ where: { id } });
-  }
-
-  async deleteTask(id: number): Promise<void> {
-    await this.delete(id);
-  }
-
-  async updateTaskStatus(id: number, status: TaskStatus): Promise<Task> {
-    const task = await this.getTaskById(id);
-    task.status = status;
-    await this.save(task);
+    await TaskRepository.prototype.save(task);
 
     return task;
   }
