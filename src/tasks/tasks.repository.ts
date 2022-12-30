@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common/decorators/core/injectable.decorator'
 import { DataSource, Repository } from 'typeorm';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { Task } from './entities/tasks.entity';
-import { TaskStatus } from './model/tasks-status.model';
+import { TaskStatus } from './model/tasks-status.enum';
 
 // Não implementado
 @Injectable()

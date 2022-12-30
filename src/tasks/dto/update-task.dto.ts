@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger/dist/decorators';
 import { Transform } from 'class-transformer';
 import { IsOptional, IsString, Matches } from 'class-validator';
-import { TaskStatus } from '../model/tasks-status.model';
+import { TaskStatus } from '../model/tasks-status.enum';
 
 export class UpdateTaskDto {
   @IsOptional()
