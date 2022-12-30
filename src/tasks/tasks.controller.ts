@@ -8,11 +8,12 @@ import {
 } from '@nestjs/common';
 import { Delete, Patch, Query, UsePipes } from '@nestjs/common/decorators';
 import { ParseIntPipe } from '@nestjs/common/pipes';
-import { ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger/dist';
+import { ApiBody, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger/dist';
 import { TaskStatusValidationPipe } from 'src/common/decorators/validation/task-status-validaton.pipe';
 import { handleError } from 'src/common/helpers/http-exception.filter';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { GetTasksFilterDto } from './dto/get-tasks-filter.dto';
+import { UpdateTaskStatusDto } from './dto/update-task-status.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { Task } from './entities/tasks.entity';
 import { TaskStatus } from './model/tasks-status.model';
@@ -67,18 +68,27 @@ export class TasksController {
     }
   }
 
-  // @Patch('/:id/status')
-  // @ApiOperation({
-  //   summary: 'Update one task status by ID',
-  //   description:
-  //     'Update one task status by ID. The status can be "OPEN", "IN_PROGRESS" or "DONE".',
-  // })
-  // updateTaskStatus(
-  //   @Param('id') id: string,
-  //   @Body('status', TaskStatusValidationPipe) taskStatus: TaskStatus,
-  // ): Task {
-  //   return this.tasksService.updateTaskStatus(id, taskStatus);
-  // }
+  @Patch('/:id/status')
+  @ApiOperation({
+    summary: 'Update one task status by ID',
+    description:
+      'Update the status of one given task by ID. The status can be "OPEN", "IN_PROGRESS" or "DONE".',
+  })
+  @ApiBody({
+    type: UpdateTaskStatusDto,
+    enum: [TaskStatus.OPEN, TaskStatus.DONE, TaskStatus.IN_PROGRESS],
+    required: true,
+  })
+  async updateTaskStatus(
+    @Param('id', ParseIntPipe) id: number,
+    @Body('status', TaskStatusValidationPipe) status: TaskStatus,
+  ): Promise<Task> {
+    try {
+      return await this.tasksService.updateTaskStatus(id, status);
+    } catch (err) {
+      handleError(err);
+    }
+  }
 
   // @Patch('/:id')
   // @ApiOperation({
