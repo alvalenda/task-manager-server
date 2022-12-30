@@ -7,6 +7,7 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { Delete, Patch, Query, UsePipes } from '@nestjs/common/decorators';
+import { ParseIntPipe } from '@nestjs/common/pipes';
 import { ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger/dist';
 import { TaskStatusValidationPipe } from 'src/common/decorators/validation/task-status-validaton.pipe';
 import { handleError } from 'src/common/helpers/http-exception.filter';
@@ -38,14 +39,18 @@ export class TasksController {
   //   return this.tasksService.getAllTasks();
   // }
 
-  // @Get('/:id')
-  // @ApiOperation({
-  //   summary: 'Get task by ID',
-  //   description: 'Get task by ID',
-  // })
-  // getTaskById(@Param('id') id: string): Task {
-  //   return this.tasksService.getTaskById(id);
-  // }
+  @Get('/:id')
+  @ApiOperation({
+    summary: 'Get task by ID',
+    description: 'Get task by ID',
+  })
+  async getTaskById(@Param('id', ParseIntPipe) id: number): Promise<Task> {
+    try {
+      return await this.tasksService.getTaskById(id);
+    } catch (err) {
+      handleError(err);
+    }
+  }
 
   // @Post()
   // @ApiOperation({
