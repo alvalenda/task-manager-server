@@ -22,7 +22,9 @@ export class UpdateTaskDto {
 
   @IsOptional()
   @Transform(({ value }) => value?.toUpperCase())
-  @Matches(/(OPEN|IN_PROGRESS|DONE)/)
+  @Matches(/^(OPEN|IN_PROGRESS|DONE)$/, {
+    message: 'Status must be OPEN, IN_PROGRESS or DONE',
+  })
   @ApiProperty({
     description: 'The status of the task',
     example: 'IN_PROGRESS',
