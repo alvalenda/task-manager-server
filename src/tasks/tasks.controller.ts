@@ -86,16 +86,23 @@ export class TasksController {
     }
   }
 
-  // @Patch('/:id')
-  // @ApiOperation({
-  //   summary: 'Update one task by ID',
-  //   description:
-  //     'Update one task by ID. The title and the description can be updated.',
-  // })
-  // @UsePipes(new ValidationPipe({ transform: true }))
-  // updateTask(@Param('id') id: string, @Body() dto: UpdateTaskDto): Task {
-  //   return this.tasksService.updateTask(id, dto);
-  // }
+  @Patch('/:id')
+  @ApiOperation({
+    summary: 'Update one task by ID',
+    description:
+      'Update one given task by ID. The body can contain the title, the description and the status. The status can be "OPEN", "IN_PROGRESS" or "DONE".',
+  })
+  @UsePipes(new ValidationPipe({ transform: true }))
+  async updateTask(
+    @Param('id') id: number,
+    @Body() dto: UpdateTaskDto,
+  ): Promise<Task> {
+    try {
+      return await this.tasksService.updateTask(id, dto);
+    } catch (err) {
+      handleError(err);
+    }
+  }
 
   @Delete('/:id')
   @ApiOperation({

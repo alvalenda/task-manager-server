@@ -64,19 +64,18 @@ export class TasksService {
     return task;
   }
 
-  // updateTask(id: string, dto: UpdateTaskDto): Task {
-  //   let updatedTask: Task = this.getTaskById(id);
-  //   updatedTask = {
-  //     id: updatedTask.id,
-  //     title: dto.title || updatedTask.title,
-  //     description: dto.description || updatedTask.description,
-  //     status: dto.status || updatedTask.status,
-  //   };
-  //   this.tasks = this.tasks.map((task) =>
-  //     task.id === id ? updatedTask : task,
-  //   );
-  //   return updatedTask;
-  // }
+  async updateTask(id: number, dto: UpdateTaskDto): Promise<Task> {
+    const task = await this.getTaskById(id);
+    const { title, description, status } = dto;
+
+    if (title) task.title = title;
+    if (description) task.description = description;
+    if (status) task.status = status;
+
+    await this.taskRepository.save(task);
+
+    return task;
+  }
 
   async deleteTask(id: number): Promise<void> {
     const result = await this.taskRepository.delete(id);
