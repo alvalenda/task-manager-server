@@ -6,9 +6,22 @@ import {
   Post,
   ValidationPipe,
 } from '@nestjs/common';
-import { Delete, Patch, Query, UsePipes } from '@nestjs/common/decorators';
+import {
+  Delete,
+  HttpCode,
+  Patch,
+  Query,
+  UsePipes,
+} from '@nestjs/common/decorators';
+import { HttpStatus } from '@nestjs/common/enums';
 import { ParseIntPipe } from '@nestjs/common/pipes';
-import { ApiBody, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger/dist';
+import {
+  ApiBody,
+  ApiOperation,
+  ApiQuery,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger/dist';
 import { TaskStatusValidationPipe } from 'src/common/decorators/validation/task-status-validaton.pipe';
 import { handleError } from 'src/common/helpers/http-exception.filter';
 import { CreateTaskDto } from './dto/create-task.dto';
@@ -109,6 +122,15 @@ export class TasksController {
     summary: 'Delete one task by ID',
     description: 'Delete one task by ID. The task will be deleted permanently.',
   })
+  @ApiResponse({
+    status: 204,
+    description: 'Task deleted successfully',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Task not found',
+  })
+  @HttpCode(HttpStatus.NO_CONTENT)
   async deleteTask(@Param('id', ParseIntPipe) id: number): Promise<void> {
     try {
       await this.tasksService.deleteTask(id);
