@@ -6,62 +6,40 @@ import { GetTasksFilterDto } from './dto/get-tasks-filter.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { Task } from './entities/tasks.entity';
 import { TaskStatus } from './model/tasks-status.enum';
+import { TaskRepository } from './tasks.repository';
 
 @Injectable()
 export class TasksService {
   constructor(
-    @InjectRepository(Task) private readonly taskRepository: Repository<Task>,
+    @InjectRepository(TaskRepository)
+    private readonly taskRepository: TaskRepository,
   ) {}
 
   async getTasks(filterDto: GetTasksFilterDto): Promise<Task[]> {
-    const { status, search } = filterDto;
-
-    const query = this.taskRepository.createQueryBuilder('task');
-
-    if (status) query.andWhere('task.status = :status', { status });
-
-    if (search)
-      query.andWhere(
-        '(task.title ILIKE :search OR task.description ILIKE :search)',
-        { search: `%${search}%` },
-      ); // ILIKE is case insensitive, LIKE is case sensitive
-
-    const tasks = await query.getMany();
+    const tasks = await this.taskRepository.getTasks(filterDto);
 
     return tasks;
   }
 
   async getTaskById(id: number): Promise<Task> {
-    const found = await this.taskRepository.findOneBy({ id });
-
-    if (!found)
-      throw {
-        name: 'NotFoundError',
-        message: `Task with id '${id}' not found`,
-      };
+    const found = await this.taskRepository.getTaskById(id);
 
     return found;
   }
 
   async createTask(dto: CreateTaskDto): Promise<Task> {
-    const { title, description } = dto;
+    const newTask = await this.taskRepository.createTask(dto);
 
-    const task = new Task();
-    task.title = title;
-    task.description = description;
-    task.status = TaskStatus.OPEN;
-
-    await this.taskRepository.save(task);
-
-    return task;
+    return newTask;
   }
 
   async updateTaskStatus(id: number, taskStatus: TaskStatus): Promise<Task> {
-    const task = await this.getTaskById(id);
-    task.status = taskStatus;
-    await this.taskRepository.save(task);
+    const updatedTask = await this.taskRepository.updateTaskStatus(
+      id,
+      taskStatus,
+    );
 
-    return task;
+    return updatedTask;
   }
 
   async updateTask(id: number, dto: UpdateTaskDto): Promise<Task> {
