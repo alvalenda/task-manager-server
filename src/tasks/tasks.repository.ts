@@ -76,4 +76,14 @@ export class TaskRepository extends Repository<Task> {
 
     return task;
   }
+
+  async deleteTask(id: number): Promise<void> {
+    const result = await this.delete(id);
+
+    if (result.affected === 0)
+      throw {
+        name: 'NotFoundError',
+        message: `Task with id '${id}' not found`,
+      };
+  }
 }
