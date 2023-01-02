@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common/decorators/core/injectable.decorator'
 import { DataSource, Repository } from 'typeorm';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { GetTasksFilterDto } from './dto/get-tasks-filter.dto';
+import { UpdateTaskDto } from './dto/update-task.dto';
 import { Task } from './entities/tasks.entity';
 import { TaskStatus } from './model/tasks-status.enum';
 
@@ -58,6 +59,19 @@ export class TaskRepository extends Repository<Task> {
   async updateTaskStatus(id: number, taskStatus: TaskStatus): Promise<Task> {
     const task = await this.getTaskById(id);
     task.status = taskStatus;
+    await this.save(task);
+
+    return task;
+  }
+
+  async updateTask(id: number, dto: UpdateTaskDto): Promise<Task> {
+    const task = await this.getTaskById(id);
+    const { title, description, status } = dto;
+
+    if (title) task.title = title;
+    if (description) task.description = description;
+    if (status) task.status = status;
+
     await this.save(task);
 
     return task;

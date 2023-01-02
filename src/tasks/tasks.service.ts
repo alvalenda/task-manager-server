@@ -43,16 +43,9 @@ export class TasksService {
   }
 
   async updateTask(id: number, dto: UpdateTaskDto): Promise<Task> {
-    const task = await this.getTaskById(id);
-    const { title, description, status } = dto;
+    const updatedTask = await this.taskRepository.updateTask(id, dto);
 
-    if (title) task.title = title;
-    if (description) task.description = description;
-    if (status) task.status = status;
-
-    await this.taskRepository.save(task);
-
-    return task;
+    return updatedTask;
   }
 
   async deleteTask(id: number): Promise<void> {
