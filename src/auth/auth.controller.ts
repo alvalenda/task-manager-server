@@ -6,7 +6,6 @@ import {
   Param,
   Patch,
   Post,
-  UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';

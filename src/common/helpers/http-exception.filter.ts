@@ -39,27 +39,4 @@ export function handleError(err: { name: string; message: string }): void {
   }
 
   throw new InternalServerErrorException(err.message);
-
-  //   switch (err.name) {
-  //     case 'AuthenticationError':
-  //       throw new UnauthorizedException(err.message);
-
-  //     case 'BadRequestError':
-  //       throw new BadRequestException(err.message);
-
-  //     case 'ConflictError':
-  //       throw new ConflictException(err.message);
-
-  //     case 'Forbidden':
-  //       throw new ForbiddenException(err.message);
-
-  //     case 'NotFoundError':
-  //       throw new NotFoundException(err.message);
-
-  //     case 'UnprocessableEntityError':
-  //       throw new UnprocessableEntityException(err.message);
-
-  //     default:
-  //       throw new InternalServerErrorException(err.message);
-  //   }
 }

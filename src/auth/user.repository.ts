@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common/decorators/core/injectable.decorator';
+import { typeOrmExceptionHelper } from 'src/common/helpers/typeorm-exception.helper';
 import { DataSource, Repository } from 'typeorm';
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
 import { User } from './entities/user.entity';
@@ -17,6 +18,8 @@ export class UserRepository extends Repository<User> {
     user.username = username;
     user.password = password;
 
-    await this.save(user);
+    await this.save(user).catch((err) => {
+      typeOrmExceptionHelper(err);
+    });
   }
 }
