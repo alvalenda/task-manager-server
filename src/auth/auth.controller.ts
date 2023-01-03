@@ -26,8 +26,9 @@ export class AuthController {
     description:
       'Sign up a new user with username and password credentials. Username must be lowercase. Password must be at least 8 characters long, and contain at least one lowercase letter, one uppercase letter, one number, and one symbol.',
   })
-  @UsePipes(ValidationPipe)
-  async signUp(@Body() authCredentialsDto: AuthCredentialsDto): Promise<void> {
+  async signUp(
+    @Body(ValidationPipe) authCredentialsDto: AuthCredentialsDto,
+  ): Promise<void> {
     try {
       return await this.authService.signUp(authCredentialsDto);
     } catch (err) {
