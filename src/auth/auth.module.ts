@@ -6,17 +6,20 @@ import { User } from './entities/user.entity';
 import { UserRepository } from './user.repository';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
+import { JwtStrategy } from './jwt.strategy';
+import { jwtConstants } from 'src/common/constants/constants';
 
 @Module({
   imports: [
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.register({
-      secret: String(process.env.JWT_SECRET), // needs to be transformed into a string here, otherwise it will be undefined in the jwt module. I don't know why.
+      secret: String(jwtConstants.secret),
       signOptions: { expiresIn: '1d' },
     }),
     TypeOrmModule.forFeature([User]),
   ],
   controllers: [AuthController],
-  providers: [AuthService, UserRepository],
+  providers: [AuthService, JwtStrategy, UserRepository],
+  exports: [JwtStrategy, PassportModule],
 })
 export class AuthModule {}
