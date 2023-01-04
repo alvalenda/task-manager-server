@@ -1,18 +1,8 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Patch,
-  Post,
-  ValidationPipe,
-} from '@nestjs/common';
+import { Body, Controller, Post, ValidationPipe } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { handleError } from 'src/common/helpers/http-exception.filter';
 import { AuthService } from './auth.service';
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
-import { UpdateAuthDto } from './dto/update-auth.dto';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -35,28 +25,18 @@ export class AuthController {
     }
   }
 
-  @Post()
-  create(@Body() createAuthDto: AuthCredentialsDto) {
-    return this.authService.create(createAuthDto);
-  }
-
-  @Get()
-  findAll() {
-    return this.authService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.authService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAuthDto: UpdateAuthDto) {
-    return this.authService.update(+id, updateAuthDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.authService.remove(+id);
+  @Post('/signin')
+  @ApiOperation({
+    summary: 'Sign in',
+    description: 'Sign in with username and password credentials.',
+  })
+  async signIn(
+    @Body(ValidationPipe) authCredentialsDto: AuthCredentialsDto,
+  ): Promise<{ accessToken: string }> {
+    try {
+      return await this.authService.signIn(authCredentialsDto);
+    } catch (err) {
+      handleError(err);
+    }
   }
 }

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt/dist';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
-import { UpdateAuthDto } from './dto/update-auth.dto';
 import { UserRepository } from './user.repository';
 
 @Injectable()
@@ -9,29 +9,30 @@ export class AuthService {
   constructor(
     @InjectRepository(UserRepository)
     private readonly userRepository: UserRepository,
+    private readonly jwtService: JwtService,
   ) {}
 
   async signUp(authCredentialsDto: AuthCredentialsDto): Promise<void> {
     return this.userRepository.signUp(authCredentialsDto);
   }
 
-  create(createAuthDto: AuthCredentialsDto) {
-    return 'This action adds a new auth';
-  }
+  async signIn(
+    authCredentialsDto: AuthCredentialsDto,
+  ): Promise<{ accessToken: string }> {
+    const username = await this.userRepository.validateUserPassword(
+      authCredentialsDto,
+    );
 
-  findAll() {
-    return `This action returns all auth`;
-  }
+    if (!username) {
+      throw {
+        name: 'UnauthorizedError',
+        message: 'Invalid credentials',
+      };
+    }
 
-  findOne(id: number) {
-    return `This action returns a #${id} auth`;
-  }
+    const payload = { username };
+    const accessToken = await this.jwtService.signAsync(payload);
 
-  update(id: number, updateAuthDto: UpdateAuthDto) {
-    return `This action updates a #${id} auth`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} auth`;
+    return { accessToken };
   }
 }
