@@ -1,8 +1,8 @@
 import {
   Body,
   Controller,
+  Get,
   Post,
-  Req,
   UseGuards,
   ValidationPipe,
 } from '@nestjs/common';
@@ -50,9 +50,14 @@ export class AuthController {
     }
   }
 
-  @Post('/test')
+  @Get('/signed')
   @UseGuards(AuthGuard())
-  async test(@GetUser() user: User) {
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Signed user',
+    description: 'Check if user is signed in. Returns user data.',
+  })
+  async signed(@GetUser() user: User) {
     return user;
   }
 }
