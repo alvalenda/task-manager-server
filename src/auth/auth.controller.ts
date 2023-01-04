@@ -8,7 +8,7 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { GetUser } from 'src/common/decorators/requests/signed-user.decorator';
+import { GetUser } from 'src/common/decorators/requests/get-user.decorator';
 import { handleError } from 'src/common/helpers/http-exception.filter';
 import { AuthService } from './auth.service';
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
@@ -53,7 +53,6 @@ export class AuthController {
   @Post('/test')
   @UseGuards(AuthGuard())
   async test(@GetUser() user: User) {
-    console.log(user);
     return user;
   }
 }
