@@ -13,8 +13,14 @@ async function bootstrap() {
     .setTitle('Tasks Manager API')
     .setDescription('API for managing tasks')
     .setVersion('1.0')
+    .setContact(
+      'Flavio Alvarenga',
+      'https://alvalenda-portfolio.vercel.app/',
+      'flavio.alva@outlook.com',
+    )
     .addTag('auth')
     .addTag('tasks')
+    .addBearerAuth()
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
