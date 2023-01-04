@@ -31,6 +31,9 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       throw new UnauthorizedException('Invalid credentials');
     }
 
+    delete user.password;
+    delete user.salt;
+
     return user;
   }
 }
