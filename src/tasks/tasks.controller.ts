@@ -11,11 +11,14 @@ import {
   HttpCode,
   Patch,
   Query,
+  UseGuards,
   UsePipes,
 } from '@nestjs/common/decorators';
 import { HttpStatus } from '@nestjs/common/enums';
 import { ParseIntPipe } from '@nestjs/common/pipes';
+import { AuthGuard } from '@nestjs/passport';
 import {
+  ApiBearerAuth,
   ApiBody,
   ApiOperation,
   ApiQuery,
@@ -33,9 +36,13 @@ import { TaskStatus } from './model/tasks-status.enum';
 import { TasksService } from './tasks.service';
 
 @ApiTags('tasks')
+@UseGuards(AuthGuard('jwt'))
+@ApiBearerAuth()
 @Controller('tasks')
 export class TasksController {
   constructor(private readonly tasksService: TasksService) {}
+
+  // TODO create relation between user and task, so that only the user who created the task can update or delete it, and only the user who created the task can see it
 
   @Get()
   @ApiOperation({
