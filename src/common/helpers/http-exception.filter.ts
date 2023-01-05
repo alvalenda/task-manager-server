@@ -26,7 +26,7 @@ export function handleError(err: { name: string; message: string }): void {
     throw new ConflictException(err.message);
   }
 
-  if (err.name === 'Forbidden') {
+  if (err.name === 'ForbiddenError') {
     throw new ForbiddenException(err.message);
   }
 
