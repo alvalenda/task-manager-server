@@ -66,9 +66,12 @@ export class TasksController {
     summary: 'Get task by ID',
     description: 'Get task by ID',
   })
-  async getTaskById(@Param('id', ParseIntPipe) id: number): Promise<Task> {
+  async getTaskById(
+    @Param('id', ParseIntPipe) id: number,
+    @GetUser() user: User,
+  ): Promise<Task> {
     try {
-      return await this.tasksService.getTaskById(id);
+      return await this.tasksService.getTaskById(id, user);
     } catch (err) {
       handleError(err);
     }
@@ -106,9 +109,10 @@ export class TasksController {
   async updateTaskStatus(
     @Param('id', ParseIntPipe) id: number,
     @Body('status', TaskStatusValidationPipe) status: TaskStatus,
+    @GetUser() user: User,
   ): Promise<Task> {
     try {
-      return await this.tasksService.updateTaskStatus(id, status);
+      return await this.tasksService.updateTaskStatus(id, status, user);
     } catch (err) {
       handleError(err);
     }
@@ -124,9 +128,10 @@ export class TasksController {
   async updateTask(
     @Param('id') id: number,
     @Body() dto: UpdateTaskDto,
+    @GetUser() user: User,
   ): Promise<Task> {
     try {
-      return await this.tasksService.updateTask(id, dto);
+      return await this.tasksService.updateTask(id, dto, user);
     } catch (err) {
       handleError(err);
     }

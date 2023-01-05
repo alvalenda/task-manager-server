@@ -36,13 +36,19 @@ export class TaskRepository extends Repository<Task> {
     return tasks;
   }
 
-  async getTaskById(id: number): Promise<Task> {
+  async getTaskById(id: number, user: User): Promise<Task> {
     const found = await this.findOneBy({ id });
 
     if (!found)
       throw {
         name: 'NotFoundError',
         message: `Task with id '${id}' not found`,
+      };
+
+    if (found.userId !== user.id)
+      throw {
+        name: 'ForbiddenError',
+        message: `You don't have permission to access this task`,
       };
 
     return found;
@@ -64,16 +70,20 @@ export class TaskRepository extends Repository<Task> {
     return task;
   }
 
-  async updateTaskStatus(id: number, taskStatus: TaskStatus): Promise<Task> {
-    const task = await this.getTaskById(id);
+  async updateTaskStatus(
+    id: number,
+    taskStatus: TaskStatus,
+    user: User,
+  ): Promise<Task> {
+    const task = await this.getTaskById(id, user);
     task.status = taskStatus;
     await this.save(task);
 
     return task;
   }
 
-  async updateTask(id: number, dto: UpdateTaskDto): Promise<Task> {
-    const task = await this.getTaskById(id);
+  async updateTask(id: number, dto: UpdateTaskDto, user: User): Promise<Task> {
+    const task = await this.getTaskById(id, user);
     const { title, description, status } = dto;
 
     if (title) task.title = title;

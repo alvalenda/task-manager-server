@@ -21,8 +21,8 @@ export class TasksService {
     return tasks;
   }
 
-  async getTaskById(id: number): Promise<Task> {
-    const found = await this.taskRepository.getTaskById(id);
+  async getTaskById(id: number, user: User): Promise<Task> {
+    const found = await this.taskRepository.getTaskById(id, user);
 
     return found;
   }
@@ -33,17 +33,22 @@ export class TasksService {
     return newTask;
   }
 
-  async updateTaskStatus(id: number, taskStatus: TaskStatus): Promise<Task> {
+  async updateTaskStatus(
+    id: number,
+    taskStatus: TaskStatus,
+    user: User,
+  ): Promise<Task> {
     const updatedTask = await this.taskRepository.updateTaskStatus(
       id,
       taskStatus,
+      user,
     );
 
     return updatedTask;
   }
 
-  async updateTask(id: number, dto: UpdateTaskDto): Promise<Task> {
-    const updatedTask = await this.taskRepository.updateTask(id, dto);
+  async updateTask(id: number, dto: UpdateTaskDto, user: User): Promise<Task> {
+    const updatedTask = await this.taskRepository.updateTask(id, dto, user);
 
     return updatedTask;
   }
