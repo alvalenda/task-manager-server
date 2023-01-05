@@ -54,8 +54,11 @@ export class TasksController {
   })
   @ApiQuery({ name: 'status', required: false })
   @ApiQuery({ name: 'search', required: false })
-  async getTasks(@Query(ValidationPipe) filterDto: GetTasksFilterDto) {
-    return await this.tasksService.getTasks(filterDto);
+  async getTasks(
+    @Query(ValidationPipe) filterDto: GetTasksFilterDto,
+    @GetUser() user: User,
+  ) {
+    return await this.tasksService.getTasks(filterDto, user);
   }
 
   @Get('/:id')
