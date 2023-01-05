@@ -1,4 +1,6 @@
+import { Logger } from '@nestjs/common';
 import { Injectable } from '@nestjs/common/decorators/core/injectable.decorator';
+import { InternalServerErrorException } from '@nestjs/common/exceptions';
 import { User } from 'src/auth/entities/user.entity';
 import { DataSource, Repository } from 'typeorm';
 import { CreateTaskDto } from './dto/create-task.dto';
@@ -10,6 +12,8 @@ import { TaskStatus } from './model/tasks-status.enum';
 // Não implementado
 @Injectable()
 export class TaskRepository extends Repository<Task> {
+  private readonly logger = new Logger('TaskRepository');
+
   constructor(private readonly dataSource: DataSource) {
     super(Task, dataSource.createEntityManager());
   }
@@ -29,11 +33,21 @@ export class TaskRepository extends Repository<Task> {
         { search: `%${search}%` },
       ); // ILIKE is case insensitive, LIKE is case sensitive
 
-    const tasks = await query.getMany();
+    try {
+      const tasks = await query.getMany();
+      tasks.forEach((task) => delete task.userId);
 
-    tasks.forEach((task) => delete task.userId);
+      return tasks;
+    } catch (err) {
+      this.logger.error(
+        `Failed to get tasks for user "${
+          user.username
+        }". Filters: ${JSON.stringify(filterDto)}`,
+        err.stack,
+      );
 
-    return tasks;
+      throw new InternalServerErrorException('Failed to get tasks');
+    }
   }
 
   async getTaskById(id: number, user: User): Promise<Task> {
@@ -57,7 +71,18 @@ export class TaskRepository extends Repository<Task> {
     task.user = user;
     task.status = TaskStatus.OPEN;
 
-    await this.save(task);
+    await this.save(task).catch((err) => {
+      this.logger.error(
+        `Failed to create task for user "${
+          user.username
+        }". Data: ${JSON.stringify(dto)}`,
+        err.stack,
+      );
+
+      throw new InternalServerErrorException(
+        `Failed to create task for user "${user.username}"`,
+      );
+    }); // save() returns a Promise that resolves to the saved entity (Task) or rejects with an error if the entity cannot be saved
 
     delete task.user;
 

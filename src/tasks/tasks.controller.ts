@@ -63,11 +63,10 @@ export class TasksController {
   ) {
     this.logger.verbose(
       `User
-      "${user.username}" retrieving all tasks. Filters: ${JSON.stringify(
+        "${user.username}" retrieving all tasks. Filters: ${JSON.stringify(
         filterDto,
       )}`,
     );
-
     return await this.tasksService.getTasks(filterDto, user);
   }
 
