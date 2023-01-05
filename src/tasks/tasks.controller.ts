@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  Logger,
   Param,
   Post,
   ValidationPipe,
@@ -42,6 +43,8 @@ import { TasksService } from './tasks.service';
 @ApiBearerAuth()
 @Controller('tasks')
 export class TasksController {
+  private readonly logger = new Logger('TasksController');
+
   constructor(private readonly tasksService: TasksService) {}
 
   // TODO create relation between user and task, so that only the user who created the task can update or delete it, and only the user who created the task can see it
@@ -58,6 +61,13 @@ export class TasksController {
     @Query(ValidationPipe) filterDto: GetTasksFilterDto,
     @GetUser() user: User,
   ) {
+    this.logger.verbose(
+      `User
+      "${user.username}" retrieving all tasks. Filters: ${JSON.stringify(
+        filterDto,
+      )}`,
+    );
+
     return await this.tasksService.getTasks(filterDto, user);
   }
 
@@ -89,6 +99,12 @@ export class TasksController {
     @GetUser() user: User,
   ): Promise<Task> {
     try {
+      this.logger.verbose(
+        `User "${user.username}" creating a new task. Data: ${JSON.stringify(
+          dto,
+        )}`,
+      );
+
       return await this.tasksService.createTask(dto, user);
     } catch (err) {
       handleError(err);
