@@ -57,7 +57,7 @@ export class AuthController {
     summary: 'Signed user',
     description: 'Check if user is signed in. Returns user data.',
   })
-  async signed(@GetUser() user: User) {
-    return user;
+  async signed(@GetUser() user: User): Promise<Partial<User>> {
+    return { id: user.id, username: user.username };
   }
 }
