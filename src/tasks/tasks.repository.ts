@@ -37,18 +37,12 @@ export class TaskRepository extends Repository<Task> {
   }
 
   async getTaskById(id: number, user: User): Promise<Task> {
-    const found = await this.findOneBy({ id });
+    const found = await this.findOneBy({ id, userId: user.id });
 
     if (!found)
       throw {
         name: 'NotFoundError',
         message: `Task with id '${id}' not found`,
-      };
-
-    if (found.userId !== user.id)
-      throw {
-        name: 'ForbiddenError',
-        message: `You don't have permission to access this task`,
       };
 
     return found;
