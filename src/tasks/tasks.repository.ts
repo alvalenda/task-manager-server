@@ -31,6 +31,8 @@ export class TaskRepository extends Repository<Task> {
 
     const tasks = await query.getMany();
 
+    tasks.forEach((task) => delete task.userId);
+
     return tasks;
   }
 
