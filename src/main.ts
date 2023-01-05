@@ -1,13 +1,12 @@
+import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, { cors: true });
 
-  app.enableCors({
-    origin: '*',
-  });
+  const logger = new Logger('bootstrap');
 
   const config = new DocumentBuilder()
     .setTitle('Tasks Manager API')
@@ -26,6 +25,9 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
 
-  await app.listen(3333);
+  const port = process.env.PORT || 3333;
+
+  await app.listen(port);
+  logger.log(`Application listening on port ${port}`);
 }
 bootstrap();
