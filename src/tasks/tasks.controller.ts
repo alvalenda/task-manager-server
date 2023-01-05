@@ -151,9 +151,12 @@ export class TasksController {
     description: 'Task not found',
   })
   @HttpCode(HttpStatus.NO_CONTENT)
-  async deleteTask(@Param('id', ParseIntPipe) id: number): Promise<void> {
+  async deleteTask(
+    @Param('id', ParseIntPipe) id: number,
+    @GetUser() user: User,
+  ): Promise<void> {
     try {
-      await this.tasksService.deleteTask(id);
+      await this.tasksService.deleteTask(id, user);
     } catch (err) {
       handleError(err);
     }
