@@ -1,10 +1,11 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { User } from 'src/auth/entities/user.entity';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { TaskStatus } from '../model/tasks-status.enum';
 
 @Entity()
 export class Task {
   @PrimaryGeneratedColumn()
-  id?: number;
+  id: number;
 
   @Column()
   title: string;
@@ -15,9 +16,13 @@ export class Task {
   @Column()
   status: TaskStatus;
 
-  //   @ManyToOne(type => User, user => user.tasks, { eager: false })
-  //   user: User;
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  createdAt?: Date;
 
-  //   @Column()
-  //   userId: number;
+  @ManyToOne((type) => User, (user) => user.tasks, { eager: false })
+  user: User;
+  // eager = false, because we don't want to load the user when we load the task
+
+  @Column()
+  userId: number;
 }
