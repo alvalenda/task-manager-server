@@ -25,6 +25,8 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger/dist';
+import { User } from 'src/auth/entities/user.entity';
+import { GetUser } from 'src/common/decorators/requests/get-user.decorator';
 import { TaskStatusValidationPipe } from 'src/common/decorators/validation/task-status-validaton.pipe';
 import { handleError } from 'src/common/helpers/http-exception.filter';
 import { CreateTaskDto } from './dto/create-task.dto';
@@ -76,9 +78,12 @@ export class TasksController {
       'Create a new task with a title and a description. The status is set to "OPEN" by default.',
   })
   @UsePipes(ValidationPipe)
-  async createTask(@Body() dto: CreateTaskDto): Promise<Task> {
+  async createTask(
+    @Body() dto: CreateTaskDto,
+    @GetUser() user: User,
+  ): Promise<Task> {
     try {
-      return await this.tasksService.createTask(dto);
+      return await this.tasksService.createTask(dto, user);
     } catch (err) {
       handleError(err);
     }

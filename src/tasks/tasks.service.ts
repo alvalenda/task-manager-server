@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { User } from 'src/auth/entities/user.entity';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { GetTasksFilterDto } from './dto/get-tasks-filter.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
@@ -26,8 +27,8 @@ export class TasksService {
     return found;
   }
 
-  async createTask(dto: CreateTaskDto): Promise<Task> {
-    const newTask = await this.taskRepository.createTask(dto);
+  async createTask(dto: CreateTaskDto, user: User): Promise<Task> {
+    const newTask = await this.taskRepository.createTask(dto, user);
 
     return newTask;
   }
