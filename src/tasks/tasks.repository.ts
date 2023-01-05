@@ -9,7 +9,6 @@ import { UpdateTaskDto } from './dto/update-task.dto';
 import { Task } from './entities/tasks.entity';
 import { TaskStatus } from './model/tasks-status.enum';
 
-// Não implementado
 @Injectable()
 export class TaskRepository extends Repository<Task> {
   private readonly logger = new Logger('TaskRepository');
@@ -33,12 +32,7 @@ export class TaskRepository extends Repository<Task> {
         { search: `%${search}%` },
       ); // ILIKE is case insensitive, LIKE is case sensitive
 
-    try {
-      const tasks = await query.getMany();
-      tasks.forEach((task) => delete task.userId);
-
-      return tasks;
-    } catch (err) {
+    const tasks = await query.getMany().catch((err) => {
       this.logger.error(
         `Failed to get tasks for user "${
           user.username
@@ -47,7 +41,11 @@ export class TaskRepository extends Repository<Task> {
       );
 
       throw new InternalServerErrorException('Failed to get tasks');
-    }
+    });
+
+    tasks.forEach((task) => delete task.userId);
+
+    return tasks;
   }
 
   async getTaskById(id: number, user: User): Promise<Task> {
