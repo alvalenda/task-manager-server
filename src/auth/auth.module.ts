@@ -14,7 +14,7 @@ import { jwtConstants } from 'src/common/constants/constants';
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.register({
       secret: String(jwtConstants.secret),
-      signOptions: { expiresIn: '1d' },
+      signOptions: { expiresIn: jwtConstants.expiresIn },
     }),
     TypeOrmModule.forFeature([User]),
   ],
