@@ -1,2 +1,5 @@
+server:
+  origin: 'placeholderForFrontEndpoint'
+
 db:
   synchronize: false
