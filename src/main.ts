@@ -2,17 +2,16 @@ import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
-import * as config from 'config';
+import { serverConstants } from './common/constants/constants';
 
 async function bootstrap() {
-  const serverConfig = config.get('server');
   const logger = new Logger('bootstrap');
   const app = await NestFactory.create(AppModule);
 
   process.env.NODE_ENV === 'development'
     ? app.enableCors()
-    : (app.enableCors({ origin: serverConfig.origin }),
-      logger.log(`Accepting requests from origin "${serverConfig.origin}"`));
+    : (app.enableCors({ origin: serverConstants.origin }),
+      logger.log(`Accepting requests from origin "${serverConstants.origin}"`));
 
   const swaggerConfig = new DocumentBuilder()
     .setTitle('Tasks Manager API')
@@ -31,7 +30,7 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup('api', app, document);
 
-  const port = process.env.PORT || serverConfig.port;
+  const port = serverConstants.port;
 
   await app.listen(port);
   logger.log(`Application listening on port ${port}`);
