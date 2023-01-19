@@ -5,8 +5,8 @@
 
 ## Production Running   
 
-Production Documentation: <a href="http://nestjstaskmanagerserver-env.eba-arxph3m8.sa-east-1.elasticbeanstalk.com/api" target="_blank"> Documentaion </a>  
-Endpoint: <a href="http://nestjstaskmanagerserver-env.eba-arxph3m8.sa-east-1.elasticbeanstalk.com" target="_blank"> Server endpoint </a>  
+Production Documentation: <a href="http://taskmanager.sa-east-1.elasticbeanstalk.com/api" target="_blank"> Documentaion </a>  
+Endpoint: <a href="http://taskmanager.sa-east-1.elasticbeanstalk.com" target="_blank"> Server endpoint </a>  
 
 
 ## Description
