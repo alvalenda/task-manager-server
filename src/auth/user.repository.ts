@@ -25,6 +25,24 @@ export class UserRepository extends Repository<User> {
     });
   }
 
+  async updateName(id: number, name: string): Promise<Partial<User>> {
+    const user = await this.findOneBy({ id });
+
+    user.name = name;
+
+    await this.save(user).catch((err) => {
+      typeOrmExceptionHelper(err);
+    });
+
+    return { id: user.id, username: user.username, name: user.name };
+  }
+
+  async deleteUser(id: number): Promise<void> {
+    await this.delete(id).catch((err) => {
+      typeOrmExceptionHelper(err);
+    });
+  }
+
   async validateUserPassword(
     authCredentialsDto: AuthCredentialsDto,
   ): Promise<string> {
