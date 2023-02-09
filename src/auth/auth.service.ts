@@ -3,6 +3,8 @@ import { JwtService } from '@nestjs/jwt/dist';
 import { InjectRepository } from '@nestjs/typeorm';
 import { JwtPayload } from 'src/common/interfaces/jwt-payload.interface';
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
+import { UpdateUserNameDto } from './dto/update-user-name.dto';
+import { User } from './entities/user.entity';
 import { UserRepository } from './user.repository';
 
 @Injectable()
@@ -41,5 +43,16 @@ export class AuthService {
     ); // debug is the lowest level of logging (error, warn, log, verbose, debug, silly)
 
     return { accessToken };
+  }
+
+  async updateName(
+    id: number,
+    name: UpdateUserNameDto,
+  ): Promise<Partial<User>> {
+    return this.userRepository.updateName(id, name as unknown as string);
+  }
+
+  async deleteUser(id: number): Promise<void> {
+    await this.userRepository.deleteUser(id);
   }
 }
