@@ -23,6 +23,10 @@ export class User {
   @Column()
   salt: string;
 
+  // implement name column with default value "" (empty string)
+  @Column({ default: '' })
+  name: string;
+
   @OneToMany((type) => Task, (task) => task.user, { eager: true })
   tasks: Task[];
   // eager = true, because we want to load the tasks when we load the user (we want to see the tasks of the user)
