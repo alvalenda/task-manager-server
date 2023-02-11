@@ -1,5 +1,6 @@
 server:
-  origin: 'placeholderForFrontEndpoint'
+  origin:
+    ['https://task-manager-ashen-eight.vercel.app/', 'http://localhost:5173']
 
 db:
   synchronize: false
