@@ -8,8 +8,12 @@ export const jwtConstants: JwtConstants = {
 export const serverConstants: ServerConstants = {
   port: process.env.PORT || config.get('server.port'),
   origin:
-    [process.env.ORIGIN_DEV, process.env.ORIGIN_PROD] ||
-    config.get('server.origin'),
+    [
+      process.env.ORIGIN_DEV,
+      process.env.ORIGIN_PROD,
+      process.env.ORIGIN_PROD2,
+      process.env.ORIGIN_PROD3,
+    ] || config.get('server.origin'),
 };
 
 type ServerConstants = {
