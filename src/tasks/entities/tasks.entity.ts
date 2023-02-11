@@ -19,7 +19,11 @@ export class Task {
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createdAt?: Date;
 
-  @ManyToOne((type) => User, (user) => user.tasks, { eager: false })
+  @ManyToOne((type) => User, (user) => user.tasks, {
+    eager: false,
+    cascade: true,
+    onDelete: 'CASCADE',
+  })
   user: User;
   // eager = false, because we don't want to load the user when we load the task
 

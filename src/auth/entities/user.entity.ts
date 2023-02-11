@@ -29,7 +29,6 @@ export class User {
 
   @OneToMany((type) => Task, (task) => task.user, {
     eager: true,
-    onDelete: 'CASCADE',
   })
   tasks: Task[];
   // eager = true, because we want to load the tasks when we load the user (we want to see the tasks of the user)
